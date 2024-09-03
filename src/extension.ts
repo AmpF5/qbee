@@ -8,33 +8,42 @@ export interface Bookmark {
 export async function activate(context: vscode.ExtensionContext) {
 	const bookmarks: Bookmark[] = [];
 
-	const registerBookmark1 = vscode.commands.registerTextEditorCommand('qbee.registerBookmark1', (textEditor) => {
-		let currentPosition = textEditor!.selection.active;
-		let bookmarkPosition : vscode.Position= new vscode.Position(currentPosition.line, currentPosition.character);
-		
-		let bookmark1: Bookmark = {
-			path: textEditor.document.uri.fsPath,
-			position: bookmarkPosition
-		};
+	function registerBookmark(index: number){
+		return vscode.commands.registerTextEditorCommand(`qbee.registerBookmark${index}`, (textEditor) => {
+			let currentPosition = textEditor!.selection.active;
+			let bookmarkPosition : vscode.Position= new vscode.Position(currentPosition.line, currentPosition.character);
+			
+			let bookmark: Bookmark = {
+				path: textEditor.document.uri.fsPath,
+				position: bookmarkPosition
+			};
 
-		bookmarks[0] = bookmark1;
-		vscode.window.showInformationMessage('Save successfully');
-	});
+			bookmarks[index] = bookmark;
+			vscode.window.showInformationMessage(`Successfully saved ${index} bookmark`);
+		});
+	}
+	
+	function jumpBookmark(index: number) {
+		return vscode.commands.registerCommand(`qbee.jumpBookmark${index}`, async () => {
+			const document = await vscode.workspace.openTextDocument(vscode.Uri.file(bookmarks[index].path));
+			const textEditor = await vscode.window.showTextDocument(document);
+	
+			const bookmark = new vscode.Selection(bookmarks[index].position, bookmarks[index].position);
+			textEditor.selection = bookmark;
+			textEditor.revealRange(bookmark, vscode.TextEditorRevealType.InCenter);
+	
+			vscode.window.showInformationMessage(`Jump successfully to ${index}`);
+		});
+	
+	}
 
-	const jumpBookmark1 = vscode.commands.registerCommand('qbee.jumpBookmark1', async () => {
-		const document = await vscode.workspace.openTextDocument(vscode.Uri.file(bookmarks[0].path));
-		const textEditor = await vscode.window.showTextDocument(document);
+	for (let i = 1; i <= 5; i++) {
+		const disposableRegisterBookmark = registerBookmark(i);
+		context.subscriptions.push(disposableRegisterBookmark);
 
-		const bookmark = new vscode.Selection(bookmarks[0].position, bookmarks[0].position);
-		textEditor.selection = bookmark;
-		textEditor.revealRange(bookmark, vscode.TextEditorRevealType.InCenter);
-
-		vscode.window.showInformationMessage('Jump successfully');
-	});
-
-	context.subscriptions.push(registerBookmark1);
-	context.subscriptions.push(jumpBookmark1);
+		const disposableJumpBookmark = jumpBookmark(i);
+		context.subscriptions.push(disposableJumpBookmark);
+	};
 }
 
-// This method is called when your extension is deactivated
 export function deactivate() {}
