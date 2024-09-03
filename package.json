@@ -18,10 +18,41 @@
         "title": "Register Bookmark 1"
       },
       {
+        "command": "qbee.registerBookmark2",
+        "title": "Register Bookmark 2"
+      },
+      {
+        "command": "qbee.registerBookmark3",
+        "title": "Register Bookmark 3"
+      },
+      {
+        "command": "qbee.registerBookmark4",
+        "title": "Register Bookmark 4"
+      },
+      {
+        "command": "qbee.registerBookmark5",
+        "title": "Register Bookmark 5"
+      },
+      {
         "command": "qbee.jumpBookmark1",
         "title": "Jump to Bookmark 1"
+      },
+      {
+        "command": "qbee.jumpBookmark2",
+        "title": "Jump to Bookmark 2"
+      },
+      {
+        "command": "qbee.jumpBookmark3",
+        "title": "Jump to Bookmark 3"
+      },
+      {
+        "command": "qbee.jumpBookmark 4",
+        "title": "Jump to Bookmark 4"
+      },
+      {
+        "command": "qbee.jumpBookmark5",
+        "title": "Jump to Bookmark 5"
       }
-
     ],
     "keybindings":[
       {
@@ -30,8 +61,48 @@
         "when": "editorTextFocus"
       },
       {
+        "command": "qbee.registerBookmark2",
+        "key": "alt+shift+2",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "qbee.registerBookmark3",
+        "key": "alt+shift+3",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "qbee.registerBookmark4",
+        "key": "alt+shift+4",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "qbee.registerBookmark5",
+        "key": "alt+shift+5",
+        "when": "editorTextFocus"
+      },
+      {
         "command": "qbee.jumpBookmark1",
         "key": "alt+1",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "qbee.jumpBookmark2",
+        "key": "alt+2",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "qbee.jumpBookmark3",
+        "key": "alt+3",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "qbee.jumpBookmark4",
+        "key": "alt+4",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "qbee.jumpBookmark5",
+        "key": "alt+5",
         "when": "editorTextFocus"
       }
     ]
