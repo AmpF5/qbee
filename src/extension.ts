@@ -8,17 +8,33 @@ export interface Bookmark {
 
 export async function activate(context: vscode.ExtensionContext) {
 	const bookmarks: Bookmark[] = [];
+	registerCommands(context);
+	restoreBookmarks();
+
+	vscode.window.onDidChangeActiveTextEditor(() => {
+        restoreBookmarks();
+    });
 
 	function registerBookmark(index: number, context: vscode.ExtensionContext) {
 		return vscode.commands.registerTextEditorCommand(`qbee.registerBookmark${index}`, (textEditor) => {
+			if (!textEditor) {
+				vscode.window.showErrorMessage('No active text editor');
+				return;
+			}
+
+			console.log('here2');
+			if(!vscode.window.activeTextEditor) {
+				console.log('here1');
+				vscode.window.showErrorMessage('No active text editor');
+				return;
+			}
 			let currentPosition = textEditor.selection.active;
 			let bookmarkPosition = new vscode.Position(currentPosition.line, currentPosition.character);
-	
+			
 			let bookmark: Bookmark = {
 				path: textEditor.document.uri.fsPath,
 				position: bookmarkPosition
 			};
-	
 			bookmarks[index] = bookmark;
 			vscode.window.showInformationMessage(`Successfully saved ${index} bookmark`);
 	
@@ -33,10 +49,11 @@ export async function activate(context: vscode.ExtensionContext) {
 				vscode.window.showErrorMessage(`Bookmark ${index} not set`);
 				return;
 			}
+
 			try {
 				const document = await vscode.workspace.openTextDocument(vscode.Uri.file(bookmarks[index].path));
 				const textEditor = await vscode.window.showTextDocument(document);
-		
+				
 				const selection = new vscode.Selection(bookmarks[index].position, bookmarks[index].position);
 				textEditor.selection = selection;
 				textEditor.revealRange(selection, vscode.TextEditorRevealType.InCenter);
@@ -58,7 +75,19 @@ export async function activate(context: vscode.ExtensionContext) {
 		}
 	}
 
-	registerCommands(context);
+    function restoreBookmarks() {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+			return;
+		}
+
+        bookmarks.forEach((bookmark, index) => {
+            if (bookmark && bookmark.path === editor.document.uri.fsPath) {
+                addBookmarkIcon(context, bookmark.position);
+            }
+        });
+    }
+
 }
 
 export function deactivate() {}

@@ -82,28 +82,23 @@
       },
       {
         "command": "qbee.jumpBookmark1",
-        "key": "alt+1",
-        "when": "editorTextFocus"
+        "key": "alt+1"
       },
       {
         "command": "qbee.jumpBookmark2",
-        "key": "alt+2",
-        "when": "editorTextFocus"
+        "key": "alt+2"
       },
       {
         "command": "qbee.jumpBookmark3",
-        "key": "alt+3",
-        "when": "editorTextFocus"
+        "key": "alt+3"
       },
       {
         "command": "qbee.jumpBookmark4",
-        "key": "alt+4",
-        "when": "editorTextFocus"
+        "key": "alt+4"
       },
       {
         "command": "qbee.jumpBookmark5",
-        "key": "alt+5",
-        "when": "editorTextFocus"
+        "key": "alt+5"
       }
     ]
   },

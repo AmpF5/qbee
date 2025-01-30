@@ -1,8 +1,15 @@
 # Changelog
 
-## [Unreleased]
+## [0.3]
 
 ### Added
-- Initial release
-- Saving Bookmark
-- Jumping to Bookmark
+- Bookmark saving
+- Jump to bookmark
+- Bookmark icons
+- Jump to bookmark when no text editor open
+
+### To Add
+- [ ] Saving bookmarks
+- [ ] Loading saved bookmarks
+- [ ] Change icon
+- [ ] Add list of all saved bookmarks
