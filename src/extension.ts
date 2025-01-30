@@ -28,25 +28,37 @@ export async function activate(context: vscode.ExtensionContext) {
 	
 	function jumpBookmark(index: number) {
 		return vscode.commands.registerCommand(`qbee.jumpBookmark${index}`, async () => {
-			const document = await vscode.workspace.openTextDocument(vscode.Uri.file(bookmarks[index].path));
-			const textEditor = await vscode.window.showTextDocument(document);
-	
-			const bookmark = new vscode.Selection(bookmarks[index].position, bookmarks[index].position);
-			textEditor.selection = bookmark;
-			textEditor.revealRange(bookmark, vscode.TextEditorRevealType.InCenter);
-	
-			vscode.window.showInformationMessage(`Jump successfully to ${index}`);
+			const bookmark = bookmarks[index];
+			if (!bookmark) {
+				vscode.window.showErrorMessage(`Bookmark ${index} not set`);
+				return;
+			}
+			try {
+				const document = await vscode.workspace.openTextDocument(vscode.Uri.file(bookmarks[index].path));
+				const textEditor = await vscode.window.showTextDocument(document);
+		
+				const selection = new vscode.Selection(bookmarks[index].position, bookmarks[index].position);
+				textEditor.selection = selection;
+				textEditor.revealRange(selection, vscode.TextEditorRevealType.InCenter);
+		
+				vscode.window.showInformationMessage(`Jump successfully to ${index}`);
+			} catch (error) {
+				vscode.window.showErrorMessage(`Error while jumping to bookmark ${index}`);
+			}
 		});
 	
 	}
+	
+	function registerCommands(context: vscode.ExtensionContext) {
+		for (let i = 1; i <= 5; i++) {
+			context.subscriptions.push(
+				registerBookmark(i, context),
+				jumpBookmark(i)
+			);
+		}
+	}
 
-	for (let i = 1; i <= 5; i++) {
-		const disposableRegisterBookmark = registerBookmark(i, context);
-		context.subscriptions.push(disposableRegisterBookmark);
-
-		const disposableJumpBookmark = jumpBookmark(i);
-		context.subscriptions.push(disposableJumpBookmark);
-	};
+	registerCommands(context);
 }
 
 export function deactivate() {}
