@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { addBookmarkIcon } from './gutter';
 
 export interface Bookmark {
 	path: string;
@@ -8,18 +9,20 @@ export interface Bookmark {
 export async function activate(context: vscode.ExtensionContext) {
 	const bookmarks: Bookmark[] = [];
 
-	function registerBookmark(index: number){
+	function registerBookmark(index: number, context: vscode.ExtensionContext) {
 		return vscode.commands.registerTextEditorCommand(`qbee.registerBookmark${index}`, (textEditor) => {
-			let currentPosition = textEditor!.selection.active;
-			let bookmarkPosition : vscode.Position= new vscode.Position(currentPosition.line, currentPosition.character);
-			
+			let currentPosition = textEditor.selection.active;
+			let bookmarkPosition = new vscode.Position(currentPosition.line, currentPosition.character);
+	
 			let bookmark: Bookmark = {
 				path: textEditor.document.uri.fsPath,
 				position: bookmarkPosition
 			};
-
+	
 			bookmarks[index] = bookmark;
 			vscode.window.showInformationMessage(`Successfully saved ${index} bookmark`);
+	
+			addBookmarkIcon(context, bookmarkPosition);
 		});
 	}
 	
@@ -38,7 +41,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	}
 
 	for (let i = 1; i <= 5; i++) {
-		const disposableRegisterBookmark = registerBookmark(i);
+		const disposableRegisterBookmark = registerBookmark(i, context);
 		context.subscriptions.push(disposableRegisterBookmark);
 
 		const disposableJumpBookmark = jumpBookmark(i);
