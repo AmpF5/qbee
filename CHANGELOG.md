@@ -7,9 +7,9 @@
 - Jump to bookmark
 - Bookmark icons
 - Jump to bookmark when no text editor open
+- Saving bookmarks
+- Loading saved bookmarks
+- -Change icon
 
 ### To Add
-- [ ] Saving bookmarks
-- [ ] Loading saved bookmarks
-- [ ] Change icon
-- [ ] Add list of all saved bookmarks
+- [] Add list of all saved bookmarks
