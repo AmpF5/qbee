@@ -25,7 +25,7 @@ export function addBookmarkIcon(index: number, context: vscode.ExtensionContext,
     bookmarkDecorations.set(index, decorationType);
 }
 
-export function removeBookmarkIcon(index: number, context: vscode.ExtensionContext, position: vscode.Position) {
+export function removeBookmarkIcon(index: number) {
     let activeEditor = vscode.window.activeTextEditor;
     
     if(!activeEditor) {

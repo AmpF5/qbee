@@ -3,11 +3,11 @@ import { addBookmarkIcon, removeBookmarkIcon } from './gutter';
 
 export interface Bookmark {
 	path: string;
-	position: vscode.Position;
+	position: { line: number; character: number };
 }
 
 export async function activate(context: vscode.ExtensionContext) {
-	const bookmarks: Bookmark[] = [];
+	let bookmarks: Bookmark[] = context.globalState.get<Bookmark[] >('bookmarks', []) || {};
 	registerCommands(context);
 	restoreBookmarks();
 
@@ -29,20 +29,22 @@ export async function activate(context: vscode.ExtensionContext) {
 
 			if(bookmarks[index]) {
 				vscode.window.showInformationMessage('Removing bookmark');
-				removeBookmarkIcon(index, context, bookmarks[index].position);
+				removeBookmarkIcon(index);
 			}
 
 			let currentPosition = textEditor.selection.active;
-			let bookmarkPosition = new vscode.Position(currentPosition.line, currentPosition.character);
 			
 			let bookmark: Bookmark = {
 				path: textEditor.document.uri.fsPath,
-				position: bookmarkPosition
+				position: { line: currentPosition.line, character: currentPosition.character }
 			};
+
 			bookmarks[index] = bookmark;
 			vscode.window.showInformationMessage(`Successfully saved ${index} bookmark`);
+
+			storeBookmarksGlobal();
 	
-			addBookmarkIcon(index, context, bookmarkPosition);
+			addBookmarkIcon(index, context, new vscode.Position(bookmark.position.line, bookmark.position.character));
 		});
 	}
 	
@@ -57,8 +59,8 @@ export async function activate(context: vscode.ExtensionContext) {
 			try {
 				const document = await vscode.workspace.openTextDocument(vscode.Uri.file(bookmarks[index].path));
 				const textEditor = await vscode.window.showTextDocument(document);
-				
-				const selection = new vscode.Selection(bookmarks[index].position, bookmarks[index].position);
+				const position = new vscode.Position(bookmarks[index].position.line, bookmarks[index].position.character);
+				const selection = new vscode.Selection(position, position);
 				textEditor.selection = selection;
 				textEditor.revealRange(selection, vscode.TextEditorRevealType.InCenter);
 		
@@ -87,10 +89,15 @@ export async function activate(context: vscode.ExtensionContext) {
 
         bookmarks.forEach((bookmark, index) => {
             if (bookmark && bookmark.path === editor.document.uri.fsPath) {
-                addBookmarkIcon(index, context, bookmark.position);
+				const position = new vscode.Position(bookmarks[index].position.line, bookmarks[index].position.character);
+                addBookmarkIcon(index, context, position);
             }
         });
     }
+
+	function storeBookmarksGlobal() {
+		context.globalState.update('bookmarks', bookmarks);
+	}
 }
 
 export function deactivate() {}
