@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { addBookmarkIcon } from './gutter';
+import { addBookmarkIcon, removeBookmarkIcon } from './gutter';
 
 export interface Bookmark {
 	path: string;
@@ -22,12 +22,16 @@ export async function activate(context: vscode.ExtensionContext) {
 				return;
 			}
 
-			console.log('here2');
 			if(!vscode.window.activeTextEditor) {
-				console.log('here1');
 				vscode.window.showErrorMessage('No active text editor');
 				return;
 			}
+
+			if(bookmarks[index]) {
+				vscode.window.showInformationMessage('Removing bookmark');
+				removeBookmarkIcon(index, context, bookmarks[index].position);
+			}
+
 			let currentPosition = textEditor.selection.active;
 			let bookmarkPosition = new vscode.Position(currentPosition.line, currentPosition.character);
 			
@@ -38,7 +42,7 @@ export async function activate(context: vscode.ExtensionContext) {
 			bookmarks[index] = bookmark;
 			vscode.window.showInformationMessage(`Successfully saved ${index} bookmark`);
 	
-			addBookmarkIcon(context, bookmarkPosition);
+			addBookmarkIcon(index, context, bookmarkPosition);
 		});
 	}
 	
@@ -83,11 +87,10 @@ export async function activate(context: vscode.ExtensionContext) {
 
         bookmarks.forEach((bookmark, index) => {
             if (bookmark && bookmark.path === editor.document.uri.fsPath) {
-                addBookmarkIcon(context, bookmark.position);
+                addBookmarkIcon(index, context, bookmark.position);
             }
         });
     }
-
 }
 
 export function deactivate() {}
