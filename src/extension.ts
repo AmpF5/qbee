@@ -40,7 +40,6 @@ export async function activate(context: vscode.ExtensionContext) {
 			};
 
 			bookmarks[index] = bookmark;
-			vscode.window.showInformationMessage(`Successfully saved ${index} bookmark`);
 
 			storeBookmarksGlobal();
 	
@@ -64,7 +63,6 @@ export async function activate(context: vscode.ExtensionContext) {
 				textEditor.selection = selection;
 				textEditor.revealRange(selection, vscode.TextEditorRevealType.InCenter);
 		
-				vscode.window.showInformationMessage(`Jump successfully to ${index}`);
 			} catch (error) {
 				vscode.window.showErrorMessage(`Error while jumping to bookmark ${index}`);
 			}
