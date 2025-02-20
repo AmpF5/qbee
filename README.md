@@ -8,9 +8,9 @@
 
 ## Features
 
-- Create up to 5 bookmarks in your code files.
-- Jump to any of the saved bookmarks quickly.
-- Saving bookmarks
+- Create up to 5 bookmarks in your code files
+- Quickly jump between saved bookmarks
+- Bookmarks are saved automatically.
 
 ## Release Notes
 
@@ -21,6 +21,6 @@ Initial release of qbee.
 
 ## License
 
-The [MIT License](LICENSE)
+[MIT License](LICENSE)
 
 ### **Enjoy!**
