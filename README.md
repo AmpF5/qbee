@@ -6,11 +6,6 @@
     Use bookmarks to quickly roam around IDE
 </p>
 
-## qbee for Visual Studio Code
-
-
-###  This extension allows you to create and jump to bookmarks within your code files in Visual Studio Code.
-
 ## Features
 
 - Create up to 5 bookmarks in your code files.
