@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.3]
+## [0.9]
 
 ### Added
 - Bookmark saving
@@ -9,7 +9,7 @@
 - Jump to bookmark when no text editor open
 - Saving bookmarks
 - Loading saved bookmarks
-- -Change icon
+- Change bookmark icon
 
 ### To Add
 - [] Add list of all saved bookmarks

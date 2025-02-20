@@ -1,8 +1,15 @@
-# qbee for Visual Studio Code
+<p align="center" style="text-align: center">
+  <img src="media\logo.png" width="30%"><br/>
+</p>
+
+<p align="center">
+    Use bookmarks to quickly roam around IDE
+</p>
+
+## qbee for Visual Studio Code
 
 
-
-This extension allows you to create and jump to bookmarks within your code files in Visual Studio Code.
+###  This extension allows you to create and jump to bookmarks within your code files in Visual Studio Code.
 
 ## Features
 
@@ -12,12 +19,13 @@ This extension allows you to create and jump to bookmarks within your code files
 
 ## Release Notes
 
-### 1.0.0
+### 0.9
 
 Initial release of qbee.
+
 
 ## License
 
 The [MIT License](LICENSE)
 
-**Enjoy!**
+### **Enjoy!**
