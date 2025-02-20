@@ -1,14 +1,41 @@
 {
   "name": "qbee",
   "displayName": "QBee",
-  "description": "",
-  "version": "0.0.1",
+  "description": "Use bookmarks to quickly roam around IDE",
+  "version": "0.9.0",
+  "publisher": "MateuszKurzyna",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AmpF5/qbee"
+  },
+  "bugs": {
+    "url": "https://github.com/AmpF5/qbee/issues"
+  },
+  "license": "MIT",
+  "icon": "media/logo.png",
   "engines": {
     "vscode": "^1.92.0"
   },
   "categories": [
-    "Other"
+    "Programming Languages", "Other"
   ],
+  "keywords": [
+    "bookmarks",
+    "jump",
+    "navigation",
+    "code-navigation",
+    "quick-access",
+    "shortcut",
+    "marker",
+    "save-position",
+    "editor",
+    "productivity",
+    "workspace"
+  ],
+  "galleryBanner": {
+    "color": "#4b525e",
+    "theme": "dark"
+  },
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
