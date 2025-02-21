@@ -7,7 +7,7 @@ export interface Bookmark {
 }
 
 export async function activate(context: vscode.ExtensionContext) {
-	let bookmarks: Bookmark[] = context.globalState.get<Bookmark[] >('bookmarks', []) || {};
+	let bookmarks: Bookmark[] = context.globalState.get<Bookmark[] >('qbee.bookmarks', []) || {};
 	registerCommands(context);
 	restoreBookmarks();
 
@@ -28,7 +28,6 @@ export async function activate(context: vscode.ExtensionContext) {
 			}
 
 			if(bookmarks[index]) {
-				vscode.window.showInformationMessage('Removing bookmark');
 				removeBookmarkIcon(index);
 			}
 
@@ -42,7 +41,7 @@ export async function activate(context: vscode.ExtensionContext) {
 			bookmarks[index] = bookmark;
 
 			storeBookmarksGlobal();
-	
+
 			addBookmarkIcon(index, context, new vscode.Position(bookmark.position.line, bookmark.position.character));
 		});
 	}
@@ -94,7 +93,7 @@ export async function activate(context: vscode.ExtensionContext) {
     }
 
 	function storeBookmarksGlobal() {
-		context.globalState.update('bookmarks', bookmarks);
+		context.globalState.update('qbee.bookmarks', bookmarks);
 	}
 }
 

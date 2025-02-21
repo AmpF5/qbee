@@ -2,7 +2,7 @@
   "name": "qbee",
   "displayName": "QBee",
   "description": "Use bookmarks to quickly roam around IDE",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "publisher": "MateuszKurzyna",
   "repository": {
     "type": "git",
@@ -73,7 +73,7 @@
         "title": "Jump to Bookmark 3"
       },
       {
-        "command": "qbee.jumpBookmark 4",
+        "command": "qbee.jumpBookmark4",
         "title": "Jump to Bookmark 4"
       },
       {
