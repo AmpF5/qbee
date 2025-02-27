@@ -15,6 +15,24 @@ export async function activate(context: vscode.ExtensionContext) {
         restoreBookmarks();
     });
 
+	vscode.workspace.onDidChangeTextDocument((event) => {
+		for (const change of event.contentChanges) {
+			const lineDelta = change.text.split("\n").length - 1;
+	
+			if (lineDelta !== 0) {
+				bookmarks.forEach((bookmark, index) => {
+					if (bookmark.path === event.document.uri.fsPath) {
+						if (bookmark.position.line >= change.range.start.line) {
+							bookmarks[index].position.line = bookmark.position.line + lineDelta;
+						}
+					}
+				});
+			}
+		}
+	
+		storeBookmarksGlobal();
+	});
+
 	function registerBookmark(index: number, context: vscode.ExtensionContext) {
 		return vscode.commands.registerTextEditorCommand(`qbee.registerBookmark${index}`, (textEditor) => {
 			if (!textEditor) {

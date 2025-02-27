@@ -20,7 +20,7 @@ export function addBookmarkIcon(index: number, context: vscode.ExtensionContext,
         rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed
     });
 
-    const range = new vscode.Range(position.line, 0, position.line, 0);
+    const range = new vscode.Range(position, position);
     activeEditor.setDecorations(decorationType, [{ range }]);
 
     bookmarkDecorations.set(index, decorationType);
