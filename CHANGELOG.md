@@ -14,4 +14,3 @@
 ### To Add
 - [] Add list of all saved bookmarks
 - [] Removing bookmark
-- [] Fix bug with icon being copied in gutter

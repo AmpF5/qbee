@@ -17,6 +17,7 @@ export function addBookmarkIcon(index: number, context: vscode.ExtensionContext,
     const decorationType = vscode.window.createTextEditorDecorationType({
         gutterIconPath: vscode.Uri.file(context.asAbsolutePath('media/icon.png')),
         gutterIconSize: 'contain',
+        rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed
     });
 
     const range = new vscode.Range(position.line, 0, position.line, 0);
