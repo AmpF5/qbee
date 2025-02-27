@@ -27,16 +27,22 @@ export async function activate(context: vscode.ExtensionContext) {
 				return;
 			}
 
-			if(bookmarks[index]) {
-				removeBookmarkIcon(index);
-			}
-
 			let currentPosition = textEditor.selection.active;
 			
 			let bookmark: Bookmark = {
 				path: textEditor.document.uri.fsPath,
 				position: { line: currentPosition.line, character: currentPosition.character }
 			};
+
+			if(bookmarks[index]) {
+				removeBookmarkIcon(index);
+				
+				let previousBookmark = bookmarks[index];
+
+				if(JSON.stringify(previousBookmark) === JSON.stringify(bookmark)) {
+					return;
+				}
+			}
 
 			bookmarks[index] = bookmark;
 
@@ -50,7 +56,6 @@ export async function activate(context: vscode.ExtensionContext) {
 		return vscode.commands.registerCommand(`qbee.jumpBookmark${index}`, async () => {
 			const bookmark = bookmarks[index];
 			if (!bookmark) {
-				vscode.window.showErrorMessage(`Bookmark ${index} not set`);
 				return;
 			}
 

@@ -13,4 +13,4 @@
 
 ### To Add
 - [] Add list of all saved bookmarks
-- [] Removing bookmark
+- [] Position is not being changed when inserting new lines before bookmark
