@@ -3,7 +3,9 @@ import { addBookmarkIcon, removeBookmarkIcon } from './gutter';
 import { BookmarksProvider } from './activityBar';
 
 export interface Bookmark {
-	path: string;
+	index: number,
+	path: string,
+	fileName: string,
 	position: { line: number; character: number };
 }
 
@@ -14,6 +16,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	const bookmarksProvider = new BookmarksProvider();
   	vscode.window.registerTreeDataProvider('qBeeView', bookmarksProvider);
+	bookmarksProvider.loadBookmarks(bookmarks);
 
 	vscode.window.onDidChangeActiveTextEditor(() => {
         restoreBookmarks();
@@ -52,6 +55,8 @@ export async function activate(context: vscode.ExtensionContext) {
 			let currentPosition = textEditor.selection.active;
 			
 			let bookmark: Bookmark = {
+				index: index,
+				fileName: `${vscode.workspace.asRelativePath(textEditor.document.uri)}: ${currentPosition.line + 1}`,
 				path: textEditor.document.uri.fsPath,
 				position: { line: currentPosition.line, character: currentPosition.character }
 			};
@@ -70,11 +75,11 @@ export async function activate(context: vscode.ExtensionContext) {
 
 			storeBookmarksGlobal();
 
+			// Add to gutter
 			addBookmarkIcon(index, context, new vscode.Position(bookmark.position.line, bookmark.position.character));
 
-			const position = textEditor.selection.active;
-			const label = `${vscode.workspace.asRelativePath(textEditor.document.uri)}: ${position.line + 1}`;
-			bookmarksProvider.addBookmark(index, label, position);
+			// Add to ActivityBar
+			bookmarksProvider.addBookmark(bookmark);
 		});
 	}
 	

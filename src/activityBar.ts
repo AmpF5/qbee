@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { Bookmark } from './extension';
 
 
 export class BookmarksProvider implements vscode.TreeDataProvider<BookmarkItem> {
@@ -13,25 +14,34 @@ export class BookmarksProvider implements vscode.TreeDataProvider<BookmarkItem> 
     getChildren(): BookmarkItem[] {
       return this.bookmarks;
     }
+
+    loadBookmarks(bookmarks: Bookmark[]): void {
+        bookmarks.forEach(bookmark => {
+            this.addBookmark(bookmark);
+        });
+    }
     
-    addBookmark(index: number, label: string, position: vscode.Position): void {
-      const newBookmark = new BookmarkItem(index, label, position);
+    addBookmark(bookmark: Bookmark): void {
+      const newBookmark = new BookmarkItem(bookmark);
       this.bookmarks.push(newBookmark);
       this._onDidChangeTreeData.fire(undefined);
     }
   }
   
   class BookmarkItem extends vscode.TreeItem {
-    constructor(
-        public readonly index: number,
-        public readonly label: string,
-        public readonly position: vscode.Position
-    ) {
-        super(label, vscode.TreeItemCollapsibleState.None);
-        this.command = {
-            command: `qbee.jumpBookmark${index}`,
-            title: `Go to Bookmark ${index}`,
-            arguments: [this.position]
-        };
-    }
+        public readonly index: number;
+        public readonly label: string;
+        public readonly position: vscode.Position;
+
+        constructor(bookmark: Bookmark) {
+            super(bookmark.fileName, vscode.TreeItemCollapsibleState.None);
+            this.index = bookmark.index;
+            this.label = bookmark.fileName;
+            this.position = new vscode.Position(bookmark.position.line, bookmark.position.character);
+            this.command = {
+                command: `qbee.jumpBookmark${bookmark.index}`,
+                title: `Go to Bookmark ${bookmark.index}`,
+                arguments: [this.position]
+            };
+        }
   }
