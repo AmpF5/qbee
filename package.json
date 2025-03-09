@@ -127,7 +127,25 @@
         "command": "qbee.jumpBookmark5",
         "key": "alt+5"
       }
-    ]
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "qBee",
+          "title": "QBee's Bookmarks",
+          "icon": "media/logo.png"
+        }
+      ]
+    },
+    "views": {
+      "qBee": [
+        {
+          "id": "qBeeView",
+          "name": "",
+          "icon": "media/logo.png"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
