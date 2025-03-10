@@ -24,14 +24,23 @@ export class BookmarksProvider implements vscode.TreeDataProvider<BookmarkItem> 
     addBookmark(bookmark: Bookmark): void {
       const newBookmark = new BookmarkItem(bookmark);
       this.bookmarks.push(newBookmark);
+      this.sortBookmarks();
       this._onDidChangeTreeData.fire(undefined);
     }
 
     removeBookmark(index: number): void {
         const indexToDelete = this.bookmarks.findIndex(x => x.index === index);
-        if(indexToDelete !== -1) {
-            this.bookmarks.splice(indexToDelete, 1);
+
+        if(indexToDelete === -1) {
+            return;
         }
+
+        this.bookmarks.splice(indexToDelete, 1);
+        this.sortBookmarks();
+    }
+
+    sortBookmarks(): void {
+        this.bookmarks.sort((a, b) => a.index - b.index);
     }
   }
   
