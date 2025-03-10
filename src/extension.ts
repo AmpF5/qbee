@@ -63,6 +63,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 			if(bookmarks[index]) {
 				removeBookmarkIcon(index);
+				bookmarksProvider.removeBookmark(index);
 				
 				let previousBookmark = bookmarks[index];
 

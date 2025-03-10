@@ -26,6 +26,13 @@ export class BookmarksProvider implements vscode.TreeDataProvider<BookmarkItem> 
       this.bookmarks.push(newBookmark);
       this._onDidChangeTreeData.fire(undefined);
     }
+
+    removeBookmark(index: number): void {
+        const indexToDelete = this.bookmarks.findIndex(x => x.index === index);
+        if(indexToDelete !== -1) {
+            this.bookmarks.splice(indexToDelete, 1);
+        }
+    }
   }
   
   class BookmarkItem extends vscode.TreeItem {
