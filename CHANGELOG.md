@@ -3,7 +3,10 @@
 ## [0.9.3]
 
 ### Added
-- ActivityBar 
+- Removing bookmarks via command
 
 ### To Add
 - Removing bookmarks via ActivityBar
+
+### To Fix
+- Gutter icons not being loaded on initialized

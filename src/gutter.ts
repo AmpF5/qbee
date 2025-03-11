@@ -38,3 +38,7 @@ export function removeBookmarkIcon(index: number) {
         bookmarkDecorations.delete(index);
     }
 }
+
+export function removeAllBookmarksFromGutter() {
+    bookmarkDecorations.clear();
+}

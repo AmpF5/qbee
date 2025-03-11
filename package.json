@@ -79,6 +79,30 @@
       {
         "command": "qbee.jumpBookmark5",
         "title": "Jump to Bookmark 5"
+      },
+      {
+        "command": "qbee.removeBookmark1",
+        "title": "Remove Bookmark 1"
+      },
+      {
+        "command": "qbee.removeBookmark2",
+        "title": "Remove Bookmark 2"
+      },
+      {
+        "command": "qbee.removeBookmark3",
+        "title": "Remove Bookmark 3"
+      },
+      {
+        "command": "qbee.removeBookmark4",
+        "title": "Remove Bookmark 4"
+      },
+      {
+        "command": "qbee.removeBookmark5",
+        "title": "Remove Bookmark 5"
+      },
+      {
+        "command": "qbee.removeAllBookmarks",
+        "title": "Remove All Bookmarks"
       }
     ],
     "keybindings": [

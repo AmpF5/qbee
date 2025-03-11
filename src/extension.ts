@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { addBookmarkIcon, removeBookmarkIcon } from './gutter';
+import { addBookmarkIcon, removeAllBookmarksFromGutter, removeBookmarkIcon } from './gutter';
 import { BookmarksProvider } from './activityBar';
 
 export interface Bookmark {
@@ -27,12 +27,17 @@ export async function activate(context: vscode.ExtensionContext) {
 			const lineDelta = change.text.split("\n").length - 1;
 	
 			if (lineDelta !== 0) {
-				bookmarks.forEach((bookmark, index) => {
+				bookmarks = bookmarks.map((bookmark) => {
 					if (bookmark.path === event.document.uri.fsPath) {
-						if (bookmark.position.line >= change.range.start.line) {
-							bookmarks[index].position.line = bookmark.position.line + lineDelta;
+						if (bookmark.position.line > change.range.start.line) {
+							bookmark.position
+							return {
+								...bookmark,
+								position: new vscode.Position(bookmark.position.line + lineDelta, bookmark.position.character)
+							};
 						}
 					}
+					return bookmark;
 				});
 			}
 		}
@@ -61,18 +66,25 @@ export async function activate(context: vscode.ExtensionContext) {
 				position: { line: currentPosition.line, character: currentPosition.character }
 			};
 
-			if(bookmarks[index]) {
+			let previousBookmark = bookmarks.find(x => x.index === index);
+
+			if(previousBookmark) {
+				const indexToDelete = bookmarks.findIndex(x => x.index === index);
+
+				if(indexToDelete === -1) {
+					return;
+				}
+		
+				bookmarks.splice(indexToDelete, 1);
 				removeBookmarkIcon(index);
 				bookmarksProvider.removeBookmark(index);
-				
-				let previousBookmark = bookmarks[index];
 
 				if(JSON.stringify(previousBookmark) === JSON.stringify(bookmark)) {
 					return;
 				}
 			}
 
-			bookmarks[index] = bookmark;
+			bookmarks.push(bookmark);
 
 			storeBookmarksGlobal();
 
@@ -86,15 +98,16 @@ export async function activate(context: vscode.ExtensionContext) {
 	
 	function jumpBookmark(index: number) {
 		return vscode.commands.registerCommand(`qbee.jumpBookmark${index}`, async () => {
-			const bookmark = bookmarks[index];
+			const bookmark = bookmarks.find(x => x.index === index);
+
 			if (!bookmark) {
 				return;
 			}
 
 			try {
-				const document = await vscode.workspace.openTextDocument(vscode.Uri.file(bookmarks[index].path));
+				const document = await vscode.workspace.openTextDocument(vscode.Uri.file(bookmark.path));
 				const textEditor = await vscode.window.showTextDocument(document);
-				const position = new vscode.Position(bookmarks[index].position.line, bookmarks[index].position.character);
+				const position = new vscode.Position(bookmark.position.line, bookmark.position.character);
 				const selection = new vscode.Selection(position, position);
 				textEditor.selection = selection;
 				textEditor.revealRange(selection, vscode.TextEditorRevealType.InCenter);
@@ -103,16 +116,41 @@ export async function activate(context: vscode.ExtensionContext) {
 				vscode.window.showErrorMessage(`Error while jumping to bookmark ${index}`);
 			}
 		});
-	
+	}
+
+	function removeBookmark(index: number) {
+		return vscode.commands.registerCommand(`qbee.removeBookmark${index}`,  () => {
+			const indexToDelete = bookmarks.findIndex(x => x.index === index);
+
+			if(indexToDelete === -1) {
+				return;
+			}
+
+        	bookmarks.splice(indexToDelete, 1);
+			removeBookmarkIcon(index);
+			bookmarksProvider.removeBookmark(index);
+		});
+	}
+
+	function removeAllBookmarks() {
+		return vscode.commands.registerCommand('qbee.removeAllBookmarks', () => {
+			bookmarks = [];
+			bookmarksProvider.removeAllBookmarksFromActivitybar();
+			removeAllBookmarksFromGutter();
+			
+		});
 	}
 	
 	function registerCommands(context: vscode.ExtensionContext) {
 		for (let i = 1; i <= 5; i++) {
 			context.subscriptions.push(
 				registerBookmark(i, context),
-				jumpBookmark(i)
+				jumpBookmark(i),
+				removeBookmark(i),
 			);
 		}
+
+		context.subscriptions.push(removeAllBookmarks());
 	}
 
     function restoreBookmarks() {
@@ -123,7 +161,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
         bookmarks.forEach((bookmark, index) => {
             if (bookmark && bookmark.path === editor.document.uri.fsPath) {
-				const position = new vscode.Position(bookmarks[index].position.line, bookmarks[index].position.character);
+				const position = new vscode.Position(bookmark.position.line, bookmark.position.character);
                 addBookmarkIcon(index, context, position);
             }
         });

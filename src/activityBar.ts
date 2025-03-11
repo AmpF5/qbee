@@ -37,6 +37,12 @@ export class BookmarksProvider implements vscode.TreeDataProvider<BookmarkItem> 
 
         this.bookmarks.splice(indexToDelete, 1);
         this.sortBookmarks();
+        this._onDidChangeTreeData.fire(undefined);
+    }
+
+    removeAllBookmarksFromActivitybar(): void {
+        this.bookmarks = [];
+        this._onDidChangeTreeData.fire(undefined);
     }
 
     sortBookmarks(): void {
@@ -54,6 +60,8 @@ export class BookmarksProvider implements vscode.TreeDataProvider<BookmarkItem> 
             this.index = bookmark.index;
             this.label = bookmark.fileName;
             this.position = new vscode.Position(bookmark.position.line, bookmark.position.character);
+            this.tooltip = bookmark.fileName;
+            // this.contextValue = `qbee.`
             this.command = {
                 command: `qbee.jumpBookmark${bookmark.index}`,
                 title: `Go to Bookmark ${bookmark.index}`,
